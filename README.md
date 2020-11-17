@@ -1,10 +1,18 @@
-# chetan/pils
+# jittering/kegs
 
 ## How do I install these formulae?
 
-`brew install chetan/pils/<formula>`
+```sh
+brew install jittering/kegs/<formula>
 
-Or `brew tap chetan/pils` and then `brew install <formula>`.
+# Or
+brew tap jittering/kegs
+brew install <formula>
+```
+
+## Available Formulae
+
+* [vproxy](Formula/vproxy.rb)
 
 ## Documentation
 
