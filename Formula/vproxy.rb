@@ -2,16 +2,16 @@
 class Vproxy < Formula
   desc "zero-config virtual proxies with tls"
   homepage "https://github.com/jittering/vproxy"
-  version "0.3.0"
+  version "0.4"
   bottle :unneeded
 
   if OS.mac?
-    url "https://github.com/jittering/vproxy/releases/v0.3.0/vproxy_0.3.0_Darwin_x86_64.tar.gz"
-    sha256 "fb7390009ad23008c00389d8d55d485ea4fdc101d0218694d6fce75235de4613"
+    url "https://github.com/jittering/vproxy/releases/v0.4/vproxy_0.4_Darwin_x86_64.tar.gz"
+    sha256 "cd94506dd71e5b3a7c37cb64c0c713d7381c502e0c5ae2b70d96b7a274d1b681"
   end
   if OS.linux? && Hardware::CPU.intel?
-    url "https://github.com/jittering/vproxy/releases/v0.3.0/vproxy_0.3.0_Linux_x86_64.tar.gz"
-    sha256 "93c5c921f044b9b5dff0496948b464cc40ba08f481a3c8edac8ed0db72be2691"
+    url "https://github.com/jittering/vproxy/releases/v0.4/vproxy_0.4_Linux_x86_64.tar.gz"
+    sha256 "e2983be1124467c3dea7f50110febb8163be94a96305f4b707031cd8993daf23"
   end
   
   depends_on "mkcert"
@@ -21,6 +21,24 @@ class Vproxy < Formula
     File.open("#{etc}/vproxy.conf", "w") do |f|
       f.puts <<-EOF
     # Sample config file
+    # All commented settings below are defaults
+    
+    [server]
+    # IP on which server will listen
+    # To listen on all IPs, set listen = "0.0.0.0"
+    #listen = "127.0.0.1"
+    
+    # Ports to listen on
+    #http = 80
+    #https = 443
+    
+    [client]
+    #host = "127.0.0.1"
+    #http = 80
+    
+    # Use this in local config files, i.e., a .vproxy.conf file located in a
+    # project folder
+    #bind = ""
     EOF
     end
   end
