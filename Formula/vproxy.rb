@@ -6,12 +6,12 @@ class Vproxy < Formula
   bottle :unneeded
 
   if OS.mac?
-    url "https://github.com/jittering/vproxy/releases/v0.4/vproxy_0.4_Darwin_x86_64.tar.gz"
-    sha256 "cd94506dd71e5b3a7c37cb64c0c713d7381c502e0c5ae2b70d96b7a274d1b681"
+    url "https://github.com/jittering/vproxy/releases/download/v0.4/vproxy_0.4_Darwin_x86_64.tar.gz"
+    sha256 "dd8257c99166deb87a349f2b86e157d4d86a48b60842048e81195684ae3a1afd"
   end
   if OS.linux? && Hardware::CPU.intel?
-    url "https://github.com/jittering/vproxy/releases/v0.4/vproxy_0.4_Linux_x86_64.tar.gz"
-    sha256 "e2983be1124467c3dea7f50110febb8163be94a96305f4b707031cd8993daf23"
+    url "https://github.com/jittering/vproxy/releases/download/v0.4/vproxy_0.4_Linux_x86_64.tar.gz"
+    sha256 "3ad6b62afff33577bce322f667af63a8092ab78067a8fd853296af1dc9148a99"
   end
   
   depends_on "mkcert"
