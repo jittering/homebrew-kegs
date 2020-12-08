@@ -2,16 +2,16 @@
 class Vproxy < Formula
   desc "zero-config virtual proxies with tls"
   homepage "https://github.com/jittering/vproxy"
-  version "0.4.2"
+  version "0.4.3"
   bottle :unneeded
 
   if OS.mac?
-    url "https://github.com/jittering/vproxy/releases/download/v0.4.2/vproxy_0.4.2_Darwin_x86_64.tar.gz"
-    sha256 "ba4d37003f3fbeb9f431d9c8275c1af84b7f1f58812685d37a06566db887b39e"
+    url "https://github.com/jittering/vproxy/releases/download/v0.4.3/vproxy_0.4.3_Darwin_x86_64.tar.gz"
+    sha256 "cfda92ec1ec27d85eb179f4af1e2a6b02c057d09f3a8208f4bc44584b1daac9e"
   end
   if OS.linux? && Hardware::CPU.intel?
-    url "https://github.com/jittering/vproxy/releases/download/v0.4.2/vproxy_0.4.2_Linux_x86_64.tar.gz"
-    sha256 "4b178b9089a4403ce4a8cb95ad07fceacceb9738656cdfeda8c99075405a8774"
+    url "https://github.com/jittering/vproxy/releases/download/v0.4.3/vproxy_0.4.3_Linux_x86_64.tar.gz"
+    sha256 "322bcb863599a93eec5b05330affbd7a4bfb7b1bf01d957bc894c1ce403e0393"
   end
 
   depends_on "mkcert"
@@ -19,7 +19,7 @@ class Vproxy < Formula
   def install
     bin.install "vproxy"
     File.open("#{etc}/vproxy.conf", "w") do |f|
-      f.puts <<-EOF
+      str = <<-EOF
     # Sample config file
     # All commented settings below are defaults
 
@@ -32,6 +32,19 @@ class Vproxy < Formula
     #http = 80
     #https = 443
 
+
+    # The following paths are set explicitly to facilitate running as root
+
+    # mkcert's CAROOT path
+    # Set to output of `mkcert -CAROOT`
+    caroot_path = "#{`mkcert -CAROOT`.strip}"
+
+    # Path where generated certificates should be stored
+    cert_path = "#{ENV['HOME']}/.vproxy"
+
+    # Path to mkcert program
+    mkcert_path = "#{`which mkcert`.strip}"
+
     [client]
     #host = "127.0.0.1"
     #http = 80
@@ -40,6 +53,7 @@ class Vproxy < Formula
     # project folder
     #bind = ""
     EOF
+      f.puts str.gsub(/\s+/, "")
     end
   end
 
@@ -59,7 +73,7 @@ class Vproxy < Formula
     <string>#{plist_name}</string>
     <key>ProgramArguments</key>
     <array>
-      <string>#{opt_bin}/vproxy</string>
+      <string>#{bin}/vproxy</string>
       <string>daemon</string>
     </array>
     <key>RunAtLoad</key>
