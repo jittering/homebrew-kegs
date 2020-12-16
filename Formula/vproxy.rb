@@ -2,64 +2,73 @@
 class Vproxy < Formula
   desc "zero-config virtual proxies with tls"
   homepage "https://github.com/jittering/vproxy"
-  version "0.4.5"
+  version "0.4.6"
   bottle :unneeded
 
   if OS.mac?
-    url "https://github.com/jittering/vproxy/releases/download/v0.4.5/vproxy_0.4.5_Darwin_x86_64.tar.gz"
-    sha256 "518c6e601f8c1305fff893a06f3128876a64054f9b8ca16b0af33ae8dc5ad2a3"
+    url "https://github.com/jittering/vproxy/releases/download/v0.4.6/vproxy_0.4.6_Darwin_x86_64.tar.gz"
+    sha256 "0ef801bb3f9441921abce4d5139c030643d8c39457b888701a0b0439c256aa0c"
   end
   if OS.linux? && Hardware::CPU.intel?
-    url "https://github.com/jittering/vproxy/releases/download/v0.4.5/vproxy_0.4.5_Linux_x86_64.tar.gz"
-    sha256 "4971f725d00d7d232ff3d1842a05e60cda72131ad6932378c1dc73a74751b633"
+    url "https://github.com/jittering/vproxy/releases/download/v0.4.6/vproxy_0.4.6_Linux_x86_64.tar.gz"
+    sha256 "93e9a9732e51c18e62ea83a6009520ea6659610c105f2d206de74346fcc3662d"
   end
 
   depends_on "mkcert"
 
   def install
     bin.install "vproxy"
+  end
 
-    # only create if it doesn't already exist
-    conf_file = "#{etc}/vproxy.conf"
-    if !File.exist?(conf_file) then
-      File.open(conf_file, "w") do |f|
-        str = <<-EOF
-      # Sample config file
-      # All commented settings below are defaults
+  def post_install
+    str = <<-EOF
+# Sample config file
+# All commented settings below are defaults
 
-      [server]
-      # IP on which server will listen
-      # To listen on all IPs, set listen = "0.0.0.0"
-      #listen = "127.0.0.1"
+[server]
+# IP on which server will listen
+# To listen on all IPs, set listen = "0.0.0.0"
+#listen = "127.0.0.1"
 
-      # Ports to listen on
-      #http = 80
-      #https = 443
+# Ports to listen on
+#http = 80
+#https = 443
 
 
-      # The following paths are set explicitly to facilitate running as root
+# The following paths are set explicitly to facilitate running as root
 
-      # mkcert's CAROOT path
-      # Set to output of `mkcert -CAROOT`
-      caroot_path = "#{`mkcert -CAROOT`.strip}"
+# mkcert's CAROOT path
+# Set to output of `mkcert -CAROOT`
+caroot_path = "#{`mkcert -CAROOT`.strip}"
 
-      # Path where generated certificates should be stored
-      cert_path = "#{ENV['HOME']}/.vproxy"
+# Path where generated certificates should be stored
+cert_path = "#{ENV['HOME']}/.vproxy"
 
-      # Path to mkcert program
-      mkcert_path = "#{`which mkcert`.strip}"
+# Path to mkcert program
+mkcert_path = "#{`which mkcert`.strip}"
 
-      [client]
-      #host = "127.0.0.1"
-      #http = 80
+[client]
+#host = "127.0.0.1"
+#http = 80
 
-      # Use this in local config files, i.e., a .vproxy.conf file located in a
-      # project folder
-      #bind = ""
-      EOF
-        f.puts str.gsub(/^\s+/, "")
-      end
-    end
+# Use this in local config files, i.e., a .vproxy.conf file located in a
+# project folder
+#bind = ""
+EOF
+
+# only create if it doesn't already exist
+conf_file = "#{etc}/vproxy.conf"
+if File.exist?(conf_file) then
+  File.open(conf_file, "w") do |f|
+    f.puts str.gsub(/^[\t ]+/, "")
+  end
+end
+
+# always write new sample file
+File.open(conf_file+".sample", "w") do |f|
+  f.puts str.gsub(/^[\t ]+/, "")
+end
+
   end
 
   plist_options :startup => false
