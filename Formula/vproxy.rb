@@ -2,16 +2,16 @@
 class Vproxy < Formula
   desc "zero-config virtual proxies with tls"
   homepage "https://github.com/jittering/vproxy"
-  version "0.4.6"
+  version "0.5"
   bottle :unneeded
 
   if OS.mac?
-    url "https://github.com/jittering/vproxy/releases/download/v0.4.6/vproxy_0.4.6_Darwin_x86_64.tar.gz"
-    sha256 "0ef801bb3f9441921abce4d5139c030643d8c39457b888701a0b0439c256aa0c"
+    url "https://github.com/jittering/vproxy/releases/download/v0.5/vproxy_0.5_Darwin_x86_64.tar.gz"
+    sha256 "7ec4eeddf3c835233b58a26e16e269406fa77a8b4c30d157ad0259309be5056f"
   end
   if OS.linux? && Hardware::CPU.intel?
-    url "https://github.com/jittering/vproxy/releases/download/v0.4.6/vproxy_0.4.6_Linux_x86_64.tar.gz"
-    sha256 "93e9a9732e51c18e62ea83a6009520ea6659610c105f2d206de74346fcc3662d"
+    url "https://github.com/jittering/vproxy/releases/download/v0.5/vproxy_0.5_Linux_x86_64.tar.gz"
+    sha256 "d9dfc387fbc99c57de968f2bd4df92809ffd3d9cd6719073245214195ffcd25d"
   end
 
   depends_on "mkcert"
@@ -25,7 +25,13 @@ class Vproxy < Formula
 # Sample config file
 # All commented settings below are defaults
 
+# Enable verbose output
+#verbose = false
+
 [server]
+# Enable verbose output (for daemon only)
+#verbose = false
+
 # IP on which server will listen
 # To listen on all IPs, set listen = "0.0.0.0"
 #listen = "127.0.0.1"
@@ -48,6 +54,9 @@ cert_path = "#{ENV['HOME']}/.vproxy"
 mkcert_path = "#{`which mkcert`.strip}"
 
 [client]
+# Enable verbose output (for client only)
+#verbose = false
+
 #host = "127.0.0.1"
 #http = 80
 
@@ -58,7 +67,7 @@ EOF
 
 # only create if it doesn't already exist
 conf_file = "#{etc}/vproxy.conf"
-if !File.exist?(conf_file) then
+if File.exist?(conf_file) then
   File.open(conf_file, "w") do |f|
     f.puts str.gsub(/^[\t ]+/, "")
   end
