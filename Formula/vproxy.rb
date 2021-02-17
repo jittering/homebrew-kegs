@@ -5,20 +5,20 @@
 class Vproxy < Formula
   desc "zero-config virtual proxies with tls"
   homepage "https://github.com/jittering/vproxy"
-  version "0.6.2"
+  version "0.6.3"
   bottle :unneeded
 
   if OS.mac?
-    url "https://github.com/jittering/vproxy/releases/download/v0.6.2/vproxy_0.6.2_Darwin_x86_64.tar.gz"
-    sha256 "631ae3ba17158925c84071466e3e208b9b66e4e3d73e9f1729fdf815117a1e39"
+    url "https://github.com/jittering/vproxy/releases/download/v0.6.3/vproxy_0.6.3_Darwin_x86_64.tar.gz"
+    sha256 "51af0a05cfaf6f8eb805f48e2fb145e4e4aef362606208e9edf66ee60bcc2fdb"
   end
   if OS.linux? && Hardware::CPU.intel?
-    url "https://github.com/jittering/vproxy/releases/download/v0.6.2/vproxy_0.6.2_Linux_x86_64.tar.gz"
-    sha256 "a8e212365831651801719f7b5b64b19b915a46059eaa26bae270250282d09c1b"
+    url "https://github.com/jittering/vproxy/releases/download/v0.6.3/vproxy_0.6.3_Linux_x86_64.tar.gz"
+    sha256 "ae6c7a9349177a32f79a47489aae5bec8dcb37b8fe0d00e510efd0a88bdf3b20"
   end
   if OS.linux? && Hardware::CPU.arm? && Hardware::CPU.is_64_bit?
-    url "https://github.com/jittering/vproxy/releases/download/v0.6.2/vproxy_0.6.2_Linux_arm64.tar.gz"
-    sha256 "e6eb49abecddbaa8396256531fa7face56f76b13ea9ee51d57c6197729518734"
+    url "https://github.com/jittering/vproxy/releases/download/v0.6.3/vproxy_0.6.3_Linux_arm64.tar.gz"
+    sha256 "1e2dc9172634a05ef988ed317e05e04ec85b0c207fedd061c3e19bf68307227b"
   end
 
   depends_on "mkcert"
