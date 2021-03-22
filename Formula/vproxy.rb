@@ -5,20 +5,20 @@
 class Vproxy < Formula
   desc "zero-config virtual proxies with tls"
   homepage "https://github.com/jittering/vproxy"
-  version "0.7"
+  version "0.7.1"
   bottle :unneeded
 
   if OS.mac?
-    url "https://github.com/jittering/vproxy/releases/download/v0.7/vproxy_0.7_Darwin_x86_64.tar.gz"
-    sha256 "aacaa76774a57bf7390d0e7183fa78785ffdf19bc009c10f98d4186f2530e474"
+    url "https://github.com/jittering/vproxy/releases/download/v0.7.1/vproxy_0.7.1_Darwin_x86_64.tar.gz"
+    sha256 "ecd694eeb11a21b38ceb13bb6007d18560a65f1216851bb34872ea86ce1a2d3d"
   end
   if OS.linux? && Hardware::CPU.intel?
-    url "https://github.com/jittering/vproxy/releases/download/v0.7/vproxy_0.7_Linux_x86_64.tar.gz"
-    sha256 "6804a34a6c1deda637ca82581edcc1fedd122766b8417b924dd1b06a973cbd2e"
+    url "https://github.com/jittering/vproxy/releases/download/v0.7.1/vproxy_0.7.1_Linux_x86_64.tar.gz"
+    sha256 "77289fb3e3459f6638c6e7f80a268bebe8604b422a412dd3388269dc18f22bd1"
   end
   if OS.linux? && Hardware::CPU.arm? && Hardware::CPU.is_64_bit?
-    url "https://github.com/jittering/vproxy/releases/download/v0.7/vproxy_0.7_Linux_arm64.tar.gz"
-    sha256 "6e0022358f3068bbe982ba2eae178f35a411a2fc90de95f5b69577f6dcf3144b"
+    url "https://github.com/jittering/vproxy/releases/download/v0.7.1/vproxy_0.7.1_Linux_arm64.tar.gz"
+    sha256 "c0e24f32b5e6bb2ecf50f31eb2f610844bc75bba6ef41a11c93df099bdc3734e"
   end
 
   depends_on "mkcert"
@@ -74,7 +74,7 @@ EOF
 
 # only create if it doesn't already exist
 conf_file = "#{etc}/vproxy.conf"
-if File.exist?(conf_file) then
+if !File.exist?(conf_file) then
   File.open(conf_file, "w") do |f|
     f.puts str.gsub(/^[\t ]+/, "")
   end
