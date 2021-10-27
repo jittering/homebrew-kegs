@@ -5,27 +5,47 @@
 class Vproxy < Formula
   desc "zero-config virtual proxies with tls"
   homepage "https://github.com/jittering/vproxy"
-  version "0.7.1"
-  bottle :unneeded
+  version "0.8"
 
-  if OS.mac?
-    url "https://github.com/jittering/vproxy/releases/download/v0.7.1/vproxy_0.7.1_Darwin_x86_64.tar.gz"
-    sha256 "ecd694eeb11a21b38ceb13bb6007d18560a65f1216851bb34872ea86ce1a2d3d"
+  on_macos do
+    if Hardware::CPU.arm?
+      url "https://github.com/jittering/vproxy/releases/download/v0.8/vproxy_0.8_Darwin_arm64.tar.gz"
+      sha256 "1ca59edef5526758b6a68d2b7f10beda261853785f3b8dccc95bb6307b8209f2"
+
+      def install
+        bin.install "vproxy"
+      end
+    end
+    if Hardware::CPU.intel?
+      url "https://github.com/jittering/vproxy/releases/download/v0.8/vproxy_0.8_Darwin_x86_64.tar.gz"
+      sha256 "fbd9eee699966209d226f9ce58bb4a5b3fc0c0527a03cb69ce40a12b8e7712c6"
+
+      def install
+        bin.install "vproxy"
+      end
+    end
   end
-  if OS.linux? && Hardware::CPU.intel?
-    url "https://github.com/jittering/vproxy/releases/download/v0.7.1/vproxy_0.7.1_Linux_x86_64.tar.gz"
-    sha256 "77289fb3e3459f6638c6e7f80a268bebe8604b422a412dd3388269dc18f22bd1"
-  end
-  if OS.linux? && Hardware::CPU.arm? && Hardware::CPU.is_64_bit?
-    url "https://github.com/jittering/vproxy/releases/download/v0.7.1/vproxy_0.7.1_Linux_arm64.tar.gz"
-    sha256 "c0e24f32b5e6bb2ecf50f31eb2f610844bc75bba6ef41a11c93df099bdc3734e"
+
+  on_linux do
+    if Hardware::CPU.arm? && Hardware::CPU.is_64_bit?
+      url "https://github.com/jittering/vproxy/releases/download/v0.8/vproxy_0.8_Linux_arm64.tar.gz"
+      sha256 "324865cb2efed37856facf4182ffb02efe31d7c0a9ff1b073e3b1997b9a5eb3e"
+
+      def install
+        bin.install "vproxy"
+      end
+    end
+    if Hardware::CPU.intel?
+      url "https://github.com/jittering/vproxy/releases/download/v0.8/vproxy_0.8_Linux_x86_64.tar.gz"
+      sha256 "f204a1d78065ecd6fc598e1efc3e253065e65cd8a2d6970bdf7b2d797cab6aae"
+
+      def install
+        bin.install "vproxy"
+      end
+    end
   end
 
   depends_on "mkcert"
-
-  def install
-    bin.install "vproxy"
-  end
 
   def post_install
     str = <<-EOF
@@ -48,17 +68,11 @@ class Vproxy < Formula
 #https = 443
 
 
-# The following paths are set explicitly to facilitate running as root
-
-# mkcert's CAROOT path
-# Set to output of `mkcert -CAROOT`
-caroot_path = "#{`mkcert -CAROOT`.strip}"
+# CAROOT path
+caroot_path = "#{var}/vproxy/caroot"
 
 # Path where generated certificates should be stored
-cert_path = "#{ENV['HOME']}/.vproxy"
-
-# Path to mkcert program
-mkcert_path = "#{`which mkcert`.strip}"
+cert_path = "#{var}/vproxy/cert"
 
 [client]
 # Enable verbose output (for client only)
@@ -71,20 +85,53 @@ mkcert_path = "#{`which mkcert`.strip}"
 # project folder
 #bind = ""
 EOF
-
-# only create if it doesn't already exist
+str = str.gsub(/^[\t ]+/, "") # trim leading spaces
 conf_file = "#{etc}/vproxy.conf"
-if !File.exist?(conf_file) then
-  File.open(conf_file, "w") do |f|
-    f.puts str.gsub(/^[\t ]+/, "")
-  end
-end
 
 # always write new sample file
 File.open(conf_file+".sample", "w") do |f|
-  f.puts str.gsub(/^[\t ]+/, "")
+  f.puts str
 end
 
+# only create default conf if it doesn't already exist
+if !File.exist?(conf_file) then
+  File.open(conf_file, "w") do |f|
+    f.puts str
+  end
+end
+
+# setup var dir, if needed
+if !File.exist?("#{var}/vproxy") then
+
+  # Create/migrate caroot
+  FileUtils.mkdir_p("#{var}/vproxy/caroot", 0755)
+  mkcert_caroot = "#{`#{bin}/vproxy caroot --default`.strip}"
+  if File.exist?(mkcert_caroot) then
+    FileUtils.cp(Dir.glob("#{mkcert_caroot}/*.pem"), "#{var}/vproxy/caroot")
+  else
+    system("vproxy caroot --create")
+  end
+
+  # Create/migrate cert path
+  old_cert_path = "#{ENV['HOME']}/.vproxy"
+  if File.exist?(old_cert_path) then
+    File.rename(old_cert_path, "#{var}/vproxy/cert")
+  else
+    FileUtils.mkdir("#{var}/vproxy/cert", 0755)
+  end
+
+end
+
+  end
+
+  def caveats; <<~EOS
+    vproxy data is stored in #{var}/vproxy
+
+    A local CA root was created at #{var}/vproxy/caroot;
+      certs will be stored at #{var}/vproxy/cert when generated.
+
+    See vproxy documentation for more info
+  EOS
   end
 
   plist_options :startup => false
