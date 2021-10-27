@@ -10,7 +10,7 @@ class Vproxy < Formula
   on_macos do
     if Hardware::CPU.arm?
       url "https://github.com/jittering/vproxy/releases/download/v0.8/vproxy_0.8_Darwin_arm64.tar.gz"
-      sha256 "1ca59edef5526758b6a68d2b7f10beda261853785f3b8dccc95bb6307b8209f2"
+      sha256 "4ad2541998dddd52169f61697ad6d84c622d20b3bc0d284e540652cd29798c97"
 
       def install
         bin.install "vproxy"
@@ -18,7 +18,7 @@ class Vproxy < Formula
     end
     if Hardware::CPU.intel?
       url "https://github.com/jittering/vproxy/releases/download/v0.8/vproxy_0.8_Darwin_x86_64.tar.gz"
-      sha256 "fbd9eee699966209d226f9ce58bb4a5b3fc0c0527a03cb69ce40a12b8e7712c6"
+      sha256 "39df6c086616803c53176d97911f12ed9e0d74ab004a956d250b3b922aeef904"
 
       def install
         bin.install "vproxy"
@@ -29,7 +29,7 @@ class Vproxy < Formula
   on_linux do
     if Hardware::CPU.arm? && Hardware::CPU.is_64_bit?
       url "https://github.com/jittering/vproxy/releases/download/v0.8/vproxy_0.8_Linux_arm64.tar.gz"
-      sha256 "324865cb2efed37856facf4182ffb02efe31d7c0a9ff1b073e3b1997b9a5eb3e"
+      sha256 "978cfd129c9ccbef23267a4dbcfbd7e008b77c1b1d2c879a2ee6f35cd965328d"
 
       def install
         bin.install "vproxy"
@@ -37,7 +37,7 @@ class Vproxy < Formula
     end
     if Hardware::CPU.intel?
       url "https://github.com/jittering/vproxy/releases/download/v0.8/vproxy_0.8_Linux_x86_64.tar.gz"
-      sha256 "f204a1d78065ecd6fc598e1efc3e253065e65cd8a2d6970bdf7b2d797cab6aae"
+      sha256 "6e5955d3a4c450e65e7edd99fc2e9b3024689df0a28636743216f7123338036e"
 
       def install
         bin.install "vproxy"
@@ -102,33 +102,40 @@ end
 
 # setup var dir, if needed
 if !File.exist?("#{var}/vproxy") then
+  puts ohai_title("creating #{var}/vproxy")
 
   # Create/migrate caroot
-  FileUtils.mkdir_p("#{var}/vproxy/caroot", 0755)
+  mkdir_p("#{var}/vproxy/caroot", mode: 0755)
   mkcert_caroot = "#{`#{bin}/vproxy caroot --default`.strip}"
-  if File.exist?(mkcert_caroot) then
-    FileUtils.cp(Dir.glob("#{mkcert_caroot}/*.pem"), "#{var}/vproxy/caroot")
+  pems = Dir.glob("#{mkcert_caroot}/*.pem")
+  if pems.empty? then
+    puts ohai_title("caroot not found; create with: vaproxy caroot --create")
   else
-    system("vproxy caroot --create")
+    puts ohai_title("migrating caroot")
+    cp(pems, "#{var}/vproxy/caroot")
   end
 
   # Create/migrate cert path
   old_cert_path = "#{ENV['HOME']}/.vproxy"
   if File.exist?(old_cert_path) then
-    File.rename(old_cert_path, "#{var}/vproxy/cert")
+    puts ohai_title("migrating certs")
+    mv(old_cert_path, "#{var}/vproxy/cert", force: true)
   else
-    FileUtils.mkdir("#{var}/vproxy/cert", 0755)
+    puts ohai_title("created cert dir #{var}/vproxy/cert")
+    mkdir("#{var}/vproxy/cert", mode: 0755)
   end
-
 end
 
   end
 
   def caveats; <<~EOS
+    To install your local root CA:
+      $ vproxy caroot --create
+
     vproxy data is stored in #{var}/vproxy
 
-    A local CA root was created at #{var}/vproxy/caroot;
-      certs will be stored at #{var}/vproxy/cert when generated.
+    The local root CA is in #{var}/vproxy/caroot;
+      certs will be stored in #{var}/vproxy/cert when generated.
 
     See vproxy documentation for more info
   EOS
