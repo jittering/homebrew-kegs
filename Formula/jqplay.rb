@@ -5,12 +5,12 @@
 class Jqplay < Formula
   desc "A local playground for jq"
   homepage "https://github.com/jittering/jqplay"
-  version "0.8"
+  version "0.8.1"
 
   on_macos do
     if Hardware::CPU.intel?
-      url "https://github.com/jittering/jqplay/releases/download/v0.8/jqplay_0.8_Darwin_x86_64.tar.gz"
-      sha256 "b9ab834a8ef40251423dabc5f7001fe7b5d9c5ef91892ecca529eb3f3c2a1088"
+      url "https://github.com/jittering/jqplay/releases/download/v0.8.1/jqplay_0.8.1_Darwin_x86_64.tar.gz"
+      sha256 "8e7e6fc485191663c25412bc8b25243e078922bbc8791e2ed8d92fea598b3e47"
 
       def install
         bin.install "jqplay"
@@ -20,8 +20,8 @@ class Jqplay < Formula
 
   on_linux do
     if Hardware::CPU.intel?
-      url "https://github.com/jittering/jqplay/releases/download/v0.8/jqplay_0.8_Linux_x86_64.tar.gz"
-      sha256 "9a6ada13a3a5dd319294cd8f8ea478cfe60352011a65ab6c20cebfd5edb8d765"
+      url "https://github.com/jittering/jqplay/releases/download/v0.8.1/jqplay_0.8.1_Linux_x86_64.tar.gz"
+      sha256 "3c6c9d19d0164a6e2f4ea042239985dad1e22b4f10e550cb2c73b19bebddb7f2"
 
       def install
         bin.install "jqplay"
