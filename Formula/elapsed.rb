@@ -5,50 +5,50 @@
 class Elapsed < Formula
   desc "A simple utility which adds elapsed time markers on every input line"
   homepage "https://github.com/jittering/elapsed"
-  version "0.8"
+  version "0.9"
 
   on_macos do
     if Hardware::CPU.intel?
-      url "https://github.com/jittering/elapsed/releases/download/v0.8/elapsed_0.8_Darwin_x86_64"
-      sha256 "42fb4285e957300294942c71289b38c7f95d8f781b1142a46f94352956b5f7d4"
+      url "https://github.com/jittering/elapsed/releases/download/v0.9/elapsed_0.9_Darwin_x86_64"
+      sha256 "8c3a2f5306b2c86ad1ac0b94610acfde5d9f91ab67d8ce89929a84864e4a11d4"
 
       def install
-        bin.install "elapsed_0.8_Darwin_x86_64" => "elapsed"
+        bin.install "elapsed_0.9_Darwin_x86_64" => "elapsed"
       end
     end
     if Hardware::CPU.arm?
-      url "https://github.com/jittering/elapsed/releases/download/v0.8/elapsed_0.8_Darwin_arm64"
-      sha256 "228125eb34679723d5de561d75512e49ca669b59c3785d999e4f0d48da62cacc"
+      url "https://github.com/jittering/elapsed/releases/download/v0.9/elapsed_0.9_Darwin_arm64"
+      sha256 "f36b79aded4f4a877860646fba5128a12df9a2493e6044d3f974a4808df8f4d4"
 
       def install
-        bin.install "elapsed_0.8_Darwin_arm64" => "elapsed"
+        bin.install "elapsed_0.9_Darwin_arm64" => "elapsed"
       end
     end
   end
 
   on_linux do
-    if Hardware::CPU.arm? && !Hardware::CPU.is_64_bit?
-      url "https://github.com/jittering/elapsed/releases/download/v0.8/elapsed_0.8_Linux_armv6"
-      sha256 "fb92cf2a8c402bb5e04fc2e83c6ab1b4d078a903967b2b4ebecea552c2ecc208"
-
-      def install
-        bin.install "elapsed_0.8_Linux_armv6" => "elapsed"
-      end
-    end
     if Hardware::CPU.intel?
-      url "https://github.com/jittering/elapsed/releases/download/v0.8/elapsed_0.8_Linux_x86_64"
-      sha256 "d62037179797ac83723489ced1e343b1a133c91770446958ba18df7bbe6423c1"
+      url "https://github.com/jittering/elapsed/releases/download/v0.9/elapsed_0.9_Linux_x86_64"
+      sha256 "7fb60062a8c39b9d2f961818c75f6b9bc52a40c744a9cfa1e6f77bd4cf6e0ca4"
 
       def install
-        bin.install "elapsed_0.8_Linux_x86_64" => "elapsed"
+        bin.install "elapsed_0.9_Linux_x86_64" => "elapsed"
       end
     end
     if Hardware::CPU.arm? && Hardware::CPU.is_64_bit?
-      url "https://github.com/jittering/elapsed/releases/download/v0.8/elapsed_0.8_Linux_arm64"
-      sha256 "9ddaec3ed30e20a8c42defa647efe96fd68489a34308655f598dc24d1bc6b903"
+      url "https://github.com/jittering/elapsed/releases/download/v0.9/elapsed_0.9_Linux_arm64"
+      sha256 "8986a881abb0996b6733933301ee214abc8f2f7283e5fc6ad54c905c28d84937"
 
       def install
-        bin.install "elapsed_0.8_Linux_arm64" => "elapsed"
+        bin.install "elapsed_0.9_Linux_arm64" => "elapsed"
+      end
+    end
+    if Hardware::CPU.arm? && !Hardware::CPU.is_64_bit?
+      url "https://github.com/jittering/elapsed/releases/download/v0.9/elapsed_0.9_Linux_armv6"
+      sha256 "e09f778f7480d85a08433b034664daa8c9cbebaeabcb1ecb2ac75f4f86176016"
+
+      def install
+        bin.install "elapsed_0.9_Linux_armv6" => "elapsed"
       end
     end
   end
