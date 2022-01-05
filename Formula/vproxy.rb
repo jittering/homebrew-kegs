@@ -5,12 +5,12 @@
 class Vproxy < Formula
   desc "Zero-config virtual proxies with tls"
   homepage "https://github.com/jittering/vproxy"
-  version "0.8"
+  version "0.9"
 
   on_macos do
     if Hardware::CPU.arm?
-      url "https://github.com/jittering/vproxy/releases/download/v0.8/vproxy_0.8_Darwin_arm64.tar.gz"
-      sha256 "4ad2541998dddd52169f61697ad6d84c622d20b3bc0d284e540652cd29798c97"
+      url "https://github.com/jittering/vproxy/releases/download/v0.9/vproxy_0.9_Darwin_arm64.tar.gz"
+      sha256 "ac10c681f8378102d5e03539380755e7ed22e966e136da131468bbafd7d99d67"
 
       def install
         bin.install "vproxy"
@@ -20,8 +20,8 @@ class Vproxy < Formula
       end
     end
     if Hardware::CPU.intel?
-      url "https://github.com/jittering/vproxy/releases/download/v0.8/vproxy_0.8_Darwin_x86_64.tar.gz"
-      sha256 "39df6c086616803c53176d97911f12ed9e0d74ab004a956d250b3b922aeef904"
+      url "https://github.com/jittering/vproxy/releases/download/v0.9/vproxy_0.9_Darwin_x86_64.tar.gz"
+      sha256 "cd1b7b2a6698b8815eb4dde34373432cac8aeab8227d65fe6fadc3ad4cf1c05b"
 
       def install
         bin.install "vproxy"
@@ -34,8 +34,8 @@ class Vproxy < Formula
 
   on_linux do
     if Hardware::CPU.arm? && Hardware::CPU.is_64_bit?
-      url "https://github.com/jittering/vproxy/releases/download/v0.8/vproxy_0.8_Linux_arm64.tar.gz"
-      sha256 "978cfd129c9ccbef23267a4dbcfbd7e008b77c1b1d2c879a2ee6f35cd965328d"
+      url "https://github.com/jittering/vproxy/releases/download/v0.9/vproxy_0.9_Linux_arm64.tar.gz"
+      sha256 "bfa856b20f013d763cfea238dd6e6f2077e00c8a63c76aa36bfd41f95d4dc976"
 
       def install
         bin.install "vproxy"
@@ -45,8 +45,8 @@ class Vproxy < Formula
       end
     end
     if Hardware::CPU.intel?
-      url "https://github.com/jittering/vproxy/releases/download/v0.8/vproxy_0.8_Linux_x86_64.tar.gz"
-      sha256 "6e5955d3a4c450e65e7edd99fc2e9b3024689df0a28636743216f7123338036e"
+      url "https://github.com/jittering/vproxy/releases/download/v0.9/vproxy_0.9_Linux_x86_64.tar.gz"
+      sha256 "6e4df4dc3d8d411e33d46d9f6d402f3791627784411d1e8bd635da913ba63c35"
 
       def install
         bin.install "vproxy"
