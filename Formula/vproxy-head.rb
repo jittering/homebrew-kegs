@@ -5,12 +5,12 @@
 class VproxyHead < Formula
   desc "Zero-config virtual proxies with tls"
   homepage "https://github.com/jittering/vproxy"
-  version "0.9"
+  version "0.10"
 
   on_macos do
-    if Hardware::CPU.arm?
-      url "https://github.com/jittering/vproxy/releases/download/v0.9/vproxy_0.9_Darwin_arm64.tar.gz"
-      sha256 "ac10c681f8378102d5e03539380755e7ed22e966e136da131468bbafd7d99d67"
+    if Hardware::CPU.intel?
+      url "https://github.com/jittering/vproxy/releases/download/v0.10/vproxy_0.10_Darwin_x86_64.tar.gz"
+      sha256 "177a37630a96d1440cc5fe19e2c9ec2d6d342874b0385e8aff72c5ae8f601cd7"
 
       def install
         if build.head?
@@ -24,9 +24,9 @@ class VproxyHead < Formula
         (bash_completion/"vproxy").write bash_output
       end
     end
-    if Hardware::CPU.intel?
-      url "https://github.com/jittering/vproxy/releases/download/v0.9/vproxy_0.9_Darwin_x86_64.tar.gz"
-      sha256 "cd1b7b2a6698b8815eb4dde34373432cac8aeab8227d65fe6fadc3ad4cf1c05b"
+    if Hardware::CPU.arm?
+      url "https://github.com/jittering/vproxy/releases/download/v0.10/vproxy_0.10_Darwin_arm64.tar.gz"
+      sha256 "973e399f48c2ecca2c0282cb0e5d36b296c629126217b4bc4bcf2c84cfd37565"
 
       def install
         if build.head?
@@ -44,8 +44,8 @@ class VproxyHead < Formula
 
   on_linux do
     if Hardware::CPU.arm? && Hardware::CPU.is_64_bit?
-      url "https://github.com/jittering/vproxy/releases/download/v0.9/vproxy_0.9_Linux_arm64.tar.gz"
-      sha256 "bfa856b20f013d763cfea238dd6e6f2077e00c8a63c76aa36bfd41f95d4dc976"
+      url "https://github.com/jittering/vproxy/releases/download/v0.10/vproxy_0.10_Linux_arm64.tar.gz"
+      sha256 "c3152be11711b7d188c3c6222693375510a5e91f610fc94be3dda11addf3dba7"
 
       def install
         if build.head?
@@ -60,8 +60,8 @@ class VproxyHead < Formula
       end
     end
     if Hardware::CPU.intel?
-      url "https://github.com/jittering/vproxy/releases/download/v0.9/vproxy_0.9_Linux_x86_64.tar.gz"
-      sha256 "6e4df4dc3d8d411e33d46d9f6d402f3791627784411d1e8bd635da913ba63c35"
+      url "https://github.com/jittering/vproxy/releases/download/v0.10/vproxy_0.10_Linux_x86_64.tar.gz"
+      sha256 "398b423878fcb11bd4ef953fe776efb3867d271b3cbd342e23b745eadf5683a8"
 
       def install
         if build.head?
@@ -84,90 +84,89 @@ class VproxyHead < Formula
 
   def post_install
     str = <<~EOF
-      # Sample config file
-      # All commented settings below are defaults
+          # Sample config file
+          # All commented settings below are defaults
 
-      # Enable verbose output
-      #verbose = false
+          # Enable verbose output
+          #verbose = false
 
-      [server]
-      # Enable verbose output (for daemon only)
-      #verbose = false
+          [server]
+          # Enable verbose output (for daemon only)
+          #verbose = false
 
-      # IP on which server will listen
-      # To listen on all IPs, set listen = "0.0.0.0"
-      #listen = "127.0.0.1"
+          # IP on which server will listen
+          # To listen on all IPs, set listen = "0.0.0.0"
+          #listen = "127.0.0.1"
 
-      # Ports to listen on
-      #http = 80
-      #https = 443
+          # Ports to listen on
+          #http = 80
+          #https = 443
 
 
-      # CAROOT path
-      caroot_path = "#{var}/vproxy/caroot"
+          # CAROOT path
+          caroot_path = "#{var}/vproxy/caroot"
 
-      # Path where generated certificates should be stored
-      cert_path = "#{var}/vproxy/cert"
+          # Path where generated certificates should be stored
+          cert_path = "#{var}/vproxy/cert"
 
-      [client]
-      # Enable verbose output (for client only)
-      #verbose = false
+          [client]
+          # Enable verbose output (for client only)
+          #verbose = false
 
-      #host = "127.0.0.1"
-      #http = 80
+          #host = "127.0.0.1"
+          #http = 80
 
-      # Use this in local config files, i.e., a .vproxy.conf file located in a
-      # project folder
-      #bind = ""
-    EOF
-    str = str.gsub(/^[\t ]+/, "") # trim leading spaces
-    conf_file = "#{etc}/vproxy.conf"
+          # Use this in local config files, i.e., a .vproxy.conf file located in a
+          # project folder
+          #bind = ""
+        EOF
+        str = str.gsub(/^[\t ]+/, "") # trim leading spaces
+        conf_file = "#{etc}/vproxy.conf"
 
-    # always write new sample file
-    File.open("#{conf_file}.sample", "w") do |f|
-      f.puts str
-    end
+        # always write new sample file
+        File.open("#{conf_file}.sample", "w") do |f|
+          f.puts str
+        end
 
-    # only create default conf if it doesn't already exist
-    unless File.exist?(conf_file)
-      File.open(conf_file, "w") do |f|
-        f.puts str
-      end
-    end
-
-    # setup var dir, if needed
-    unless File.exist?("#{var}/vproxy")
-      puts ohai_title("creating #{var}/vproxy")
-
-      # Create/migrate caroot
-      mkdir_p("#{var}/vproxy/caroot", mode: 0755)
-      mkcert_caroot = `#{bin}/vproxy caroot --default`.strip
-      pems = Dir.glob("#{mkcert_caroot}/*.pem")
-      if pems.empty?
-        puts ohai_title("caroot not found; create with: vaproxy caroot --create")
-      else
-        puts ohai_title("migrating caroot")
-        cp(pems, "#{var}/vproxy/caroot")
-      end
-
-      # Create/migrate cert path
-      puts ohai_title("created cert dir #{var}/vproxy/cert")
-      mkdir_p("#{var}/vproxy/cert", mode: 0755)
-      if File.exist?(old_cert_path)
-        certs = Dir.glob("#{old_cert_path}/*.pem")
-        puts ohai_title("migrating #{certs.size} certs")
-        errs = 0
-        certs.each do |cert|
-          if File.readable?(cert)
-            cp(cert, "#{var}/vproxy/cert")
-          else
-            errs += 1
+        # only create default conf if it doesn't already exist
+        unless File.exist?(conf_file)
+          File.open(conf_file, "w") do |f|
+            f.puts str
           end
         end
-        onoe("couldn't read #{errs} cert(s)") if errs.positive?
-      end
-    end
 
+        # setup var dir, if needed
+        unless File.exist?("#{var}/vproxy")
+          puts ohai_title("creating #{var}/vproxy")
+
+          # Create/migrate caroot
+          mkdir_p("#{var}/vproxy/caroot", mode: 0755)
+          mkcert_caroot = `#{bin}/vproxy caroot --default`.strip
+          pems = Dir.glob("#{mkcert_caroot}/*.pem")
+          if pems.empty?
+            puts ohai_title("caroot not found; create with: vaproxy caroot --create")
+          else
+            puts ohai_title("migrating caroot")
+            cp(pems, "#{var}/vproxy/caroot")
+          end
+
+          # Create/migrate cert path
+          puts ohai_title("created cert dir #{var}/vproxy/cert")
+          mkdir_p("#{var}/vproxy/cert", mode: 0755)
+          if File.exist?(old_cert_path)
+            certs = Dir.glob("#{old_cert_path}/*.pem")
+            puts ohai_title("migrating #{certs.size} certs")
+            errs = 0
+            certs.each do |cert|
+              if File.readable?(cert)
+                cp(cert, "#{var}/vproxy/cert")
+              else
+                errs += 1
+              end
+            end
+            onoe("couldn't read #{errs} cert(s)") if errs.positive?
+          end
+        end
   end
 
   def caveats; <<~EOS
