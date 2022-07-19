@@ -8,9 +8,9 @@ class VproxyHead < Formula
   version "0.10.1"
 
   on_macos do
-    if Hardware::CPU.intel?
-      url "https://github.com/jittering/vproxy/releases/download/v0.10.1/vproxy_0.10.1_Darwin_x86_64.tar.gz"
-      sha256 "c8a389a05c3e4672a162e183b7e043a3dc5413d535e62a300c90b9f2c15b5d7f"
+    if Hardware::CPU.arm?
+      url "https://github.com/jittering/vproxy/releases/download/v0.10.1/vproxy_0.10.1_Darwin_arm64.tar.gz"
+      sha256 "efe0b9a1c758d19cb6c689285cc74cba3a3d79d34bac202838677f2542e33c9f"
 
       def install
         if build.head?
@@ -24,9 +24,9 @@ class VproxyHead < Formula
         (bash_completion/"vproxy").write bash_output
       end
     end
-    if Hardware::CPU.arm?
-      url "https://github.com/jittering/vproxy/releases/download/v0.10.1/vproxy_0.10.1_Darwin_arm64.tar.gz"
-      sha256 "8828c842a6ff6e08de68943f9b6bbf2fa25d6eb31040c8d708f433282983c024"
+    if Hardware::CPU.intel?
+      url "https://github.com/jittering/vproxy/releases/download/v0.10.1/vproxy_0.10.1_Darwin_x86_64.tar.gz"
+      sha256 "804c90535524ac7f9ae9963dcb1dcb8c7d38670f503466356482142d25392f84"
 
       def install
         if build.head?
@@ -45,7 +45,7 @@ class VproxyHead < Formula
   on_linux do
     if Hardware::CPU.arm? && Hardware::CPU.is_64_bit?
       url "https://github.com/jittering/vproxy/releases/download/v0.10.1/vproxy_0.10.1_Linux_arm64.tar.gz"
-      sha256 "b14b87840bcd13aa40ef99c8ade406b60e47362e44b8fc3309935fc995cd8b3c"
+      sha256 "5f9191cd15bae3b24e9618fee354add0e7bb9c5c27c41c7e6325c99959d7797f"
 
       def install
         if build.head?
@@ -61,7 +61,7 @@ class VproxyHead < Formula
     end
     if Hardware::CPU.intel?
       url "https://github.com/jittering/vproxy/releases/download/v0.10.1/vproxy_0.10.1_Linux_x86_64.tar.gz"
-      sha256 "a7f6efae1b55e06f0c6d591ee68ad88c795f5ae18179fad6292ad961aae58f37"
+      sha256 "1e25ccfb23627975bc61e3724480ac06e3ceb149712035bc7a473b6a5c28b2ef"
 
       def install
         if build.head?
