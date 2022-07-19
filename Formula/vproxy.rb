@@ -5,12 +5,12 @@
 class Vproxy < Formula
   desc "Zero-config virtual proxies with tls"
   homepage "https://github.com/jittering/vproxy"
-  version "0.10.1"
+  version "0.10.2"
 
   on_macos do
     if Hardware::CPU.arm?
-      url "https://github.com/jittering/vproxy/releases/download/v0.10.1/vproxy_0.10.1_Darwin_arm64.tar.gz"
-      sha256 "efe0b9a1c758d19cb6c689285cc74cba3a3d79d34bac202838677f2542e33c9f"
+      url "https://github.com/jittering/vproxy/releases/download/v0.10.2/vproxy_0.10.2_Darwin_arm64.tar.gz"
+      sha256 "fd14811f97e87dd39304409a14b0a542ed6d49b19090ee25513dfe4b999fce26"
 
       def install
         bin.install "vproxy"
@@ -20,8 +20,8 @@ class Vproxy < Formula
       end
     end
     if Hardware::CPU.intel?
-      url "https://github.com/jittering/vproxy/releases/download/v0.10.1/vproxy_0.10.1_Darwin_x86_64.tar.gz"
-      sha256 "804c90535524ac7f9ae9963dcb1dcb8c7d38670f503466356482142d25392f84"
+      url "https://github.com/jittering/vproxy/releases/download/v0.10.2/vproxy_0.10.2_Darwin_x86_64.tar.gz"
+      sha256 "361ddd0b3916b485ac4665c3a46ce7131062c54b2dd96b91742f63a60188d077"
 
       def install
         bin.install "vproxy"
@@ -34,8 +34,8 @@ class Vproxy < Formula
 
   on_linux do
     if Hardware::CPU.arm? && Hardware::CPU.is_64_bit?
-      url "https://github.com/jittering/vproxy/releases/download/v0.10.1/vproxy_0.10.1_Linux_arm64.tar.gz"
-      sha256 "5f9191cd15bae3b24e9618fee354add0e7bb9c5c27c41c7e6325c99959d7797f"
+      url "https://github.com/jittering/vproxy/releases/download/v0.10.2/vproxy_0.10.2_Linux_arm64.tar.gz"
+      sha256 "f6258bf3d4ccba66ca9eb1676a90116dcc55621ac7da3ece03e10ed706215222"
 
       def install
         bin.install "vproxy"
@@ -45,8 +45,8 @@ class Vproxy < Formula
       end
     end
     if Hardware::CPU.intel?
-      url "https://github.com/jittering/vproxy/releases/download/v0.10.1/vproxy_0.10.1_Linux_x86_64.tar.gz"
-      sha256 "1e25ccfb23627975bc61e3724480ac06e3ceb149712035bc7a473b6a5c28b2ef"
+      url "https://github.com/jittering/vproxy/releases/download/v0.10.2/vproxy_0.10.2_Linux_x86_64.tar.gz"
+      sha256 "2150fe183fbae9a3b0335e8eced1349a19bee3c45e93eadccd83844ea835ba03"
 
       def install
         bin.install "vproxy"
