@@ -5,12 +5,12 @@
 class VproxyHead < Formula
   desc "Zero-config virtual proxies with tls"
   homepage "https://github.com/jittering/vproxy"
-  version "0.10"
+  version "0.10.1"
 
   on_macos do
     if Hardware::CPU.intel?
-      url "https://github.com/jittering/vproxy/releases/download/v0.10/vproxy_0.10_Darwin_x86_64.tar.gz"
-      sha256 "177a37630a96d1440cc5fe19e2c9ec2d6d342874b0385e8aff72c5ae8f601cd7"
+      url "https://github.com/jittering/vproxy/releases/download/v0.10.1/vproxy_0.10.1_Darwin_x86_64.tar.gz"
+      sha256 "c8a389a05c3e4672a162e183b7e043a3dc5413d535e62a300c90b9f2c15b5d7f"
 
       def install
         if build.head?
@@ -25,8 +25,8 @@ class VproxyHead < Formula
       end
     end
     if Hardware::CPU.arm?
-      url "https://github.com/jittering/vproxy/releases/download/v0.10/vproxy_0.10_Darwin_arm64.tar.gz"
-      sha256 "973e399f48c2ecca2c0282cb0e5d36b296c629126217b4bc4bcf2c84cfd37565"
+      url "https://github.com/jittering/vproxy/releases/download/v0.10.1/vproxy_0.10.1_Darwin_arm64.tar.gz"
+      sha256 "8828c842a6ff6e08de68943f9b6bbf2fa25d6eb31040c8d708f433282983c024"
 
       def install
         if build.head?
@@ -44,8 +44,8 @@ class VproxyHead < Formula
 
   on_linux do
     if Hardware::CPU.arm? && Hardware::CPU.is_64_bit?
-      url "https://github.com/jittering/vproxy/releases/download/v0.10/vproxy_0.10_Linux_arm64.tar.gz"
-      sha256 "c3152be11711b7d188c3c6222693375510a5e91f610fc94be3dda11addf3dba7"
+      url "https://github.com/jittering/vproxy/releases/download/v0.10.1/vproxy_0.10.1_Linux_arm64.tar.gz"
+      sha256 "b14b87840bcd13aa40ef99c8ade406b60e47362e44b8fc3309935fc995cd8b3c"
 
       def install
         if build.head?
@@ -60,8 +60,8 @@ class VproxyHead < Formula
       end
     end
     if Hardware::CPU.intel?
-      url "https://github.com/jittering/vproxy/releases/download/v0.10/vproxy_0.10_Linux_x86_64.tar.gz"
-      sha256 "398b423878fcb11bd4ef953fe776efb3867d271b3cbd342e23b745eadf5683a8"
+      url "https://github.com/jittering/vproxy/releases/download/v0.10.1/vproxy_0.10.1_Linux_x86_64.tar.gz"
+      sha256 "a7f6efae1b55e06f0c6d591ee68ad88c795f5ae18179fad6292ad961aae58f37"
 
       def install
         if build.head?
