@@ -5,12 +5,15 @@
 class Vproxy < Formula
   desc "Zero-config virtual proxies with tls"
   homepage "https://github.com/jittering/vproxy"
-  version "0.12"
+  version "0.12.1"
+
+  depends_on "mkcert"
+  depends_on "nss"
 
   on_macos do
     if Hardware::CPU.arm?
-      url "https://github.com/jittering/vproxy/releases/download/v0.12/vproxy_0.12_Darwin_arm64.tar.gz"
-      sha256 "d972f2cf46ccbcdd34250d71a17186cae5f07bceb62a29b107e8305708b2096d"
+      url "https://github.com/jittering/vproxy/releases/download/v0.12.1/vproxy_darwin_arm64.tar.gz"
+      sha256 "00e1195289df096847fc105a99282a89d0f3ec4c66e56f7607ecfd5bd45e0157"
 
       def install
         bin.install "vproxy"
@@ -20,8 +23,8 @@ class Vproxy < Formula
       end
     end
     if Hardware::CPU.intel?
-      url "https://github.com/jittering/vproxy/releases/download/v0.12/vproxy_0.12_Darwin_x86_64.tar.gz"
-      sha256 "c707184c5ffbfb285c9e4dea514ccdc25bdd8038e5f3405ac5bd24c5680ef48c"
+      url "https://github.com/jittering/vproxy/releases/download/v0.12.1/vproxy_darwin_amd64.tar.gz"
+      sha256 "5f522f9478eee02cd2ea92e8f0397c1a9d5db688ccb4c557d17508589b7d10c5"
 
       def install
         bin.install "vproxy"
@@ -34,8 +37,8 @@ class Vproxy < Formula
 
   on_linux do
     if Hardware::CPU.arm? && Hardware::CPU.is_64_bit?
-      url "https://github.com/jittering/vproxy/releases/download/v0.12/vproxy_0.12_Linux_arm64.tar.gz"
-      sha256 "184f2dcf9fb36fb884dfd3ebf07701759a9a86223485512facda8b199b58cdbd"
+      url "https://github.com/jittering/vproxy/releases/download/v0.12.1/vproxy_linux_arm64.tar.gz"
+      sha256 "193b8e1b5d8ae1cf54ccfd295b33913c41ea416db4bb00d0965b4ad6b9a2b344"
 
       def install
         bin.install "vproxy"
@@ -45,8 +48,8 @@ class Vproxy < Formula
       end
     end
     if Hardware::CPU.intel?
-      url "https://github.com/jittering/vproxy/releases/download/v0.12/vproxy_0.12_Linux_x86_64.tar.gz"
-      sha256 "d53e8eeb2d26ed07f39a75a982473ed135235786ec0c88f581c838cbc2d03eed"
+      url "https://github.com/jittering/vproxy/releases/download/v0.12.1/vproxy_linux_amd64.tar.gz"
+      sha256 "ac9e06600b92869b01f8a60def9c6c1a48d43b46976ec795b1735564796c2498"
 
       def install
         bin.install "vproxy"
@@ -56,8 +59,6 @@ class Vproxy < Formula
       end
     end
   end
-
-  depends_on "mkcert"
 
   def post_install
     str = <<~EOF
@@ -146,50 +147,27 @@ class Vproxy < Formula
         end
   end
 
-  def caveats; <<~EOS
-    To install your local root CA:
-      $ vproxy caroot --create
+  def caveats
+    <<~EOS
+      To install your local root CA:
+        $ vproxy caroot --create
 
-    vproxy data is stored in #{var}/vproxy
+      vproxy data is stored in #{var}/vproxy
 
-    The local root CA is in #{var}/vproxy/caroot;
-      certs will be stored in #{var}/vproxy/cert when generated.
+      The local root CA is in #{var}/vproxy/caroot;
+        certs will be stored in #{var}/vproxy/cert when generated.
 
-    See vproxy documentation for more info
-  EOS
+      See vproxy documentation for more info
+    EOS
   end
 
-  plist_options :startup => false
-
-  def plist; <<~EOS
-    <?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
-<plist version="1.0">
-  <dict>
-    <key>KeepAlive</key>
-    <dict>
-      <key>SuccessfulExit</key>
-      <false/>
-    </dict>
-    <key>Label</key>
-    <string>#{plist_name}</string>
-    <key>ProgramArguments</key>
-    <array>
-      <string>#{bin}/vproxy</string>
-      <string>daemon</string>
-    </array>
-    <key>RunAtLoad</key>
-    <true/>
-    <key>WorkingDirectory</key>
-    <string>#{var}</string>
-    <key>StandardErrorPath</key>
-    <string>#{var}/log/vproxy.log</string>
-    <key>StandardOutPath</key>
-    <string>#{var}/log/vproxy.log</string>
-  </dict>
-</plist>
-
-  EOS
+  service do
+    name: "vproxy"
+    run: ["#{bin}/vproxy", "daemon"]
+    keep_alive: successful_exit: false
+    working_directory: "#{var}"
+    log_path: "#{var}/log/vproxy.log"
+    error_log_path: "#{var}/log/vproxy.log"
   end
 
   test do
