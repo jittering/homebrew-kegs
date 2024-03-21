@@ -5,26 +5,34 @@
 class JqplayCli < Formula
   desc "Local playground for jq"
   homepage "https://github.com/jittering/jqplay"
-  version "0.9"
+  version "0.9.1"
 
   on_macos do
-    if Hardware::CPU.intel?
-      url "https://github.com/jittering/jqplay/releases/download/v0.9/jqplay-cli_0.9_Darwin_x86_64"
-      sha256 "4c56c328ff1ba61e0098de13e03e0b20965c2d3c900865aa2ac01e7b44444eb4"
+    url "https://github.com/jittering/jqplay/releases/download/v0.9.1/jqplay-cli_Darwin_x86_64"
+    sha256 "6ad6aadbdfd3c988c79e4d9823890f648a6b8ff9f8651a247ff394a0ff43d6c2"
 
-      def install
-        bin.install "jqplay-cli_0.9_Darwin_x86_64" => "jqplay-cli"
+    def install
+      bin.install "jqplay-cli_Darwin_x86_64" => "jqplay-cli"
+    end
+
+    if Hardware::CPU.arm?
+      def caveats
+        <<~EOS
+          The darwin_arm64 architecture is not supported for the JqplayCli
+          formula at this time. The darwin_amd64 binary may work in compatibility
+          mode, but it might not be fully supported.
+        EOS
       end
     end
   end
 
   on_linux do
     if Hardware::CPU.intel?
-      url "https://github.com/jittering/jqplay/releases/download/v0.9/jqplay-cli_0.9_Linux_x86_64"
-      sha256 "e47c422010752625ee4351126308dfa9ce23c9a40678ec7c8c593c8269332a98"
+      url "https://github.com/jittering/jqplay/releases/download/v0.9.1/jqplay-cli_Linux_x86_64"
+      sha256 "62c99efeed30a223ec0b684e5f2bee1253ad58ddd9651208368cf0e5f3539b5b"
 
       def install
-        bin.install "jqplay-cli_0.9_Linux_x86_64" => "jqplay-cli"
+        bin.install "jqplay-cli_Linux_x86_64" => "jqplay-cli"
       end
     end
   end
