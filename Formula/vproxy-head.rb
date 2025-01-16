@@ -5,16 +5,16 @@
 class VproxyHead < Formula
   desc "Zero-config virtual proxies with tls"
   homepage "https://github.com/jittering/vproxy"
-  version "0.13"
+  version "0.14"
 
   depends_on "go"
   depends_on "mkcert"
   depends_on "nss"
 
   on_macos do
-    if Hardware::CPU.arm?
-      url "https://github.com/jittering/vproxy/releases/download/v0.13/vproxy_darwin_arm64.tar.gz"
-      sha256 "47200b524e03254fe985be48d1ae0cf618f5ee64dabe4079edc33305f6e9941d"
+    if Hardware::CPU.intel?
+      url "https://github.com/jittering/vproxy/releases/download/v0.14/vproxy_darwin_amd64.tar.gz"
+      sha256 "4eccce4d3918c278c4b314db0c774308f7cfe953107c464ab5f75a45aae4310f"
 
       def install
         if build.head?
@@ -28,9 +28,9 @@ class VproxyHead < Formula
         (bash_completion/"vproxy").write bash_output
       end
     end
-    if Hardware::CPU.intel?
-      url "https://github.com/jittering/vproxy/releases/download/v0.13/vproxy_darwin_amd64.tar.gz"
-      sha256 "caf506dfc81a603f74cb26c1442d241e57857b959957b848b0b34f7ae1709a24"
+    if Hardware::CPU.arm?
+      url "https://github.com/jittering/vproxy/releases/download/v0.14/vproxy_darwin_arm64.tar.gz"
+      sha256 "68fab1adbd87ed6868e3180f94d2ec56e89ace73e9af2a5d8f507b46f426b688"
 
       def install
         if build.head?
@@ -47,36 +47,40 @@ class VproxyHead < Formula
   end
 
   on_linux do
-    if Hardware::CPU.arm? && Hardware::CPU.is_64_bit?
-      url "https://github.com/jittering/vproxy/releases/download/v0.13/vproxy_linux_arm64.tar.gz"
-      sha256 "37370e1e055907ce4d76ccaa371088ec6bb9c3610a12729dbbcca1733f379b93"
+    if Hardware::CPU.intel?
+      if Hardware::CPU.is_64_bit?
+        url "https://github.com/jittering/vproxy/releases/download/v0.14/vproxy_linux_amd64.tar.gz"
+        sha256 "315b9199be6a1885dec97995cc2957cff726dd6e5049d4fc618eeb104ad168da"
 
-      def install
-        if build.head?
-          system "go", "build", *std_go_args(output: "build/vproxy"), "./bin/vproxy"
-          bin.install "build/vproxy"
-        else
-          bin.install "vproxy"
+        def install
+          if build.head?
+            system "go", "build", *std_go_args(output: "build/vproxy"), "./bin/vproxy"
+            bin.install "build/vproxy"
+          else
+            bin.install "vproxy"
+          end
+
+          bash_output = Utils.safe_popen_read("#{bin}/vproxy", "bash_completion")
+          (bash_completion/"vproxy").write bash_output
         end
-
-        bash_output = Utils.safe_popen_read("#{bin}/vproxy", "bash_completion")
-        (bash_completion/"vproxy").write bash_output
       end
     end
-    if Hardware::CPU.intel?
-      url "https://github.com/jittering/vproxy/releases/download/v0.13/vproxy_linux_amd64.tar.gz"
-      sha256 "ace40aa6642a717e4def1a3cc5ef71ce4951e23e00ebb986f97eb0eef0361a9d"
+    if Hardware::CPU.arm?
+      if Hardware::CPU.is_64_bit?
+        url "https://github.com/jittering/vproxy/releases/download/v0.14/vproxy_linux_arm64.tar.gz"
+        sha256 "8da11976f617ae989f83e67c549199d5e306753488aea11afe2a7424e358c1c7"
 
-      def install
-        if build.head?
-          system "go", "build", *std_go_args(output: "build/vproxy"), "./bin/vproxy"
-          bin.install "build/vproxy"
-        else
-          bin.install "vproxy"
+        def install
+          if build.head?
+            system "go", "build", *std_go_args(output: "build/vproxy"), "./bin/vproxy"
+            bin.install "build/vproxy"
+          else
+            bin.install "vproxy"
+          end
+
+          bash_output = Utils.safe_popen_read("#{bin}/vproxy", "bash_completion")
+          (bash_completion/"vproxy").write bash_output
         end
-
-        bash_output = Utils.safe_popen_read("#{bin}/vproxy", "bash_completion")
-        (bash_completion/"vproxy").write bash_output
       end
     end
   end
