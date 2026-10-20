@@ -5,17 +5,17 @@
 class Vproxy < Formula
   desc "Zero-config virtual proxies with tls"
   homepage "https://github.com/jittering/vproxy"
-  version "0.14"
+  version "0.15"
 
   depends_on "mkcert"
   depends_on "nss"
 
   on_macos do
     if Hardware::CPU.intel?
-      url "https://github.com/jittering/vproxy/releases/download/v0.14/vproxy_darwin_amd64.tar.gz"
-      sha256 "4eccce4d3918c278c4b314db0c774308f7cfe953107c464ab5f75a45aae4310f"
+      url "https://github.com/jittering/vproxy/releases/download/v0.15/vproxy_darwin_amd64.tar.gz"
+      sha256 "d9551d5dd0c7a8f23d09939ca29e33e006cfe4f17abbfe7e9e9f4746ec61711a"
 
-      def install
+      define_method(:install) do
         bin.install "vproxy"
 
         bash_output = Utils.safe_popen_read("#{bin}/vproxy", "bash_completion")
@@ -23,10 +23,10 @@ class Vproxy < Formula
       end
     end
     if Hardware::CPU.arm?
-      url "https://github.com/jittering/vproxy/releases/download/v0.14/vproxy_darwin_arm64.tar.gz"
-      sha256 "68fab1adbd87ed6868e3180f94d2ec56e89ace73e9af2a5d8f507b46f426b688"
+      url "https://github.com/jittering/vproxy/releases/download/v0.15/vproxy_darwin_arm64.tar.gz"
+      sha256 "1e542a5005b6c8130c81e8042272e19351b215bc0c495f5a790d2be76cd4a473"
 
-      def install
+      define_method(:install) do
         bin.install "vproxy"
 
         bash_output = Utils.safe_popen_read("#{bin}/vproxy", "bash_completion")
@@ -36,30 +36,24 @@ class Vproxy < Formula
   end
 
   on_linux do
-    if Hardware::CPU.intel?
-      if Hardware::CPU.is_64_bit?
-        url "https://github.com/jittering/vproxy/releases/download/v0.14/vproxy_linux_amd64.tar.gz"
-        sha256 "315b9199be6a1885dec97995cc2957cff726dd6e5049d4fc618eeb104ad168da"
+    if Hardware::CPU.intel? && Hardware::CPU.is_64_bit?
+      url "https://github.com/jittering/vproxy/releases/download/v0.15/vproxy_linux_amd64.tar.gz"
+      sha256 "7c911eda8a6bc2e0c19614658c8baa05a700c43c914e5bff00057140eda95f15"
+      define_method(:install) do
+        bin.install "vproxy"
 
-        def install
-          bin.install "vproxy"
-
-          bash_output = Utils.safe_popen_read("#{bin}/vproxy", "bash_completion")
-          (bash_completion/"vproxy").write bash_output
-        end
+        bash_output = Utils.safe_popen_read("#{bin}/vproxy", "bash_completion")
+        (bash_completion/"vproxy").write bash_output
       end
     end
-    if Hardware::CPU.arm?
-      if Hardware::CPU.is_64_bit?
-        url "https://github.com/jittering/vproxy/releases/download/v0.14/vproxy_linux_arm64.tar.gz"
-        sha256 "8da11976f617ae989f83e67c549199d5e306753488aea11afe2a7424e358c1c7"
+    if Hardware::CPU.arm? && Hardware::CPU.is_64_bit?
+      url "https://github.com/jittering/vproxy/releases/download/v0.15/vproxy_linux_arm64.tar.gz"
+      sha256 "bf617bb7face12acc36cc39decc68663aba9bbe95df20f98b7cd931c0dd4102a"
+      define_method(:install) do
+        bin.install "vproxy"
 
-        def install
-          bin.install "vproxy"
-
-          bash_output = Utils.safe_popen_read("#{bin}/vproxy", "bash_completion")
-          (bash_completion/"vproxy").write bash_output
-        end
+        bash_output = Utils.safe_popen_read("#{bin}/vproxy", "bash_completion")
+        (bash_completion/"vproxy").write bash_output
       end
     end
   end
@@ -90,6 +84,11 @@ class Vproxy < Formula
 
           # Path where generated certificates should be stored
           cert_path = "#{var}/vproxy/cert"
+
+          # Optional MCP authentication (disabled when token is empty)
+          #[mcp]
+          # Send Authorization: Bearer <token> on MCP requests when enabled
+          #token = ""
 
           [client]
           # Enable verbose output (for client only)
