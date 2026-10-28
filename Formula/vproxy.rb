@@ -5,15 +5,15 @@
 class Vproxy < Formula
   desc "Zero-config virtual proxies with tls"
   homepage "https://github.com/jittering/vproxy"
-  version "0.15"
+  version "0.16"
 
   depends_on "mkcert"
   depends_on "nss"
 
   on_macos do
     if Hardware::CPU.intel?
-      url "https://github.com/jittering/vproxy/releases/download/v0.15/vproxy_darwin_amd64.tar.gz"
-      sha256 "d9551d5dd0c7a8f23d09939ca29e33e006cfe4f17abbfe7e9e9f4746ec61711a"
+      url "https://github.com/jittering/vproxy/releases/download/v0.16/vproxy_darwin_amd64.tar.gz"
+      sha256 "ae9296873afeff6e61f78690259648816c710e736c8201e95c7667a529e4edb3"
 
       define_method(:install) do
         bin.install "vproxy"
@@ -23,8 +23,8 @@ class Vproxy < Formula
       end
     end
     if Hardware::CPU.arm?
-      url "https://github.com/jittering/vproxy/releases/download/v0.15/vproxy_darwin_arm64.tar.gz"
-      sha256 "1e542a5005b6c8130c81e8042272e19351b215bc0c495f5a790d2be76cd4a473"
+      url "https://github.com/jittering/vproxy/releases/download/v0.16/vproxy_darwin_arm64.tar.gz"
+      sha256 "9701b140de3e529d27698331e9a7ff85c187201cfb9c646d72658ed3a40b8a8d"
 
       define_method(:install) do
         bin.install "vproxy"
@@ -37,8 +37,8 @@ class Vproxy < Formula
 
   on_linux do
     if Hardware::CPU.intel? && Hardware::CPU.is_64_bit?
-      url "https://github.com/jittering/vproxy/releases/download/v0.15/vproxy_linux_amd64.tar.gz"
-      sha256 "7c911eda8a6bc2e0c19614658c8baa05a700c43c914e5bff00057140eda95f15"
+      url "https://github.com/jittering/vproxy/releases/download/v0.16/vproxy_linux_amd64.tar.gz"
+      sha256 "2c96528a48f21383d505ae25d76f626dbd9ff53a8ac37bf461b289fa2d1acdf0"
       define_method(:install) do
         bin.install "vproxy"
 
@@ -47,8 +47,8 @@ class Vproxy < Formula
       end
     end
     if Hardware::CPU.arm? && Hardware::CPU.is_64_bit?
-      url "https://github.com/jittering/vproxy/releases/download/v0.15/vproxy_linux_arm64.tar.gz"
-      sha256 "bf617bb7face12acc36cc39decc68663aba9bbe95df20f98b7cd931c0dd4102a"
+      url "https://github.com/jittering/vproxy/releases/download/v0.16/vproxy_linux_arm64.tar.gz"
+      sha256 "2706b4dd54d1ba1fcf537e19bd2d8c74d23006e5d9ca53e947fde3c07371ade0"
       define_method(:install) do
         bin.install "vproxy"
 
